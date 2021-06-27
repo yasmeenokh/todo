@@ -15,6 +15,4 @@ Open http://localhost:3000 to view it in the browser.
 
 [Pull ReQuests](https://github.com/yasmeenokh/todo/pulls)
 
-# White Board: 
-
-![wb](images/lab31.png)
+# White Board:
