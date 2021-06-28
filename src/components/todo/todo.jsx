@@ -50,11 +50,11 @@ function ToDo (){
     return (
       <>
       <Container>
-        <Row className="mt-5 mb-4">
+        <Row>
           <Col>
-        <Card className="bg-light">
+        <Card>
           <Card.Body>
-          <Card.Title as="h2">To Do List Manager</Card.Title>
+          <Card.Title as="h2">To Do List</Card.Title>
             <ProgressBar>
               <ProgressBar
                 striped
@@ -82,7 +82,7 @@ function ToDo (){
         </Row>
   
         <Row>
-          <Col md="4" offset="2">
+          <Col >
           <Card>
             <ToDoForm handleSubmit={addItem} />
           </Card>
