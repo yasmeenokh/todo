@@ -1,6 +1,8 @@
 import React from 'react';
 import{useState} from 'react';
 import {Form, Button, Card} from 'react-bootstrap';
+import './todo.scss'
+
 
 function ToDoForm(props){
     const [item, setItem] = useState({});
@@ -18,7 +20,7 @@ function ToDoForm(props){
     }
     return(
         <>
-        <Card.Header as='h4'>Add New List Item</Card.Header>
+        <Card.Header as='h3'>Add New List Item</Card.Header>
         <Card.Body>
             <Form onSubmit={handleSubmit}>
                 <Form.Group>
@@ -26,7 +28,7 @@ function ToDoForm(props){
                     <Form.Control type='text' name='text' placeholder='Add a new item to the list' onChange={handleInputChange}> 
                     </Form.Control>
                 </Form.Group>
-                <Form.Group>
+                <Form.Group controlId="formBasicRange">
                     <Form.Label>Difficulty Meter</Form.Label>
                     <Form.Control defaultValue='1' type='range' min='1' max='5' name='Difficulty' onChange={handleInputChange}>
                     </Form.Control>
@@ -34,6 +36,11 @@ function ToDoForm(props){
                 <Form.Group>
                     <Form.Label>Assigned To</Form.Label>
                     <Form.Control type='text' name='assignee' placeholder='Assigned To' onChange={handleInputChange}>
+                    </Form.Control>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>Due Date</Form.Label>
+                    <Form.Control type="date" name="date" placeholder="Enter due date" onChange={handleInputChange}>
                     </Form.Control>
                 </Form.Group>
                 <Button variant='primary' type='submit'>ADD ITEM</Button>
