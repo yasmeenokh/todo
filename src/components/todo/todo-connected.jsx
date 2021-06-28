@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import TodoForm from './form.jsx';
 import TodoList from './list.jsx';
+import './todo.scss'
+
 
 const todoAPI = 'https://api-js401.herokuapp.com/api/v1/todo';
 
@@ -50,6 +52,7 @@ function ToDo(){
     }
   };
 
+
   const _getTodoItems = () => {
     fetch(todoAPI, {
       method: 'get',
@@ -77,7 +80,7 @@ function ToDo(){
         </div>
 
         <div>
-          <TodoList list={list} handleComplete={toggleComplete} />
+          <TodoList list={list} handleComplete={toggleComplete} handleDelete={handleDelete} />
         </div>
       </section>
     </>

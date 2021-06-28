@@ -33,7 +33,11 @@ function ToDo (){
         setList(newList);
       }
     };
-  
+    const handleDelete = id => {
+      let item = list.filter(i => i._id !== id);
+      setList(item);
+    };
+
     const getTodoItems = () => {
       let list = [
         { _id: 1, complete: false, text: 'Clean the Kitchen', difficulty: 3, assignee: 'Person A'},
@@ -50,10 +54,10 @@ function ToDo (){
     return (
       <>
       <Container>
-        <Row>
+        <Row className="mt-5 mb-4">
           <Col>
-        <Card>
-          <Card.Body>
+        <Card className="bg-light">
+          <Card.Body className="todo-details">
           <Card.Title as="h2">To Do List</Card.Title>
             <ProgressBar>
               <ProgressBar
@@ -82,14 +86,14 @@ function ToDo (){
         </Row>
   
         <Row>
-          <Col >
+          <Col md="4" offset="2">
           <Card>
             <ToDoForm handleSubmit={addItem} />
           </Card>
           </Col>
           <Col md="8" offset="2">
           <Card>
-            <TodoList list={list} handleComplete={toggleComplete} />
+            <TodoList list={list} handleComplete={toggleComplete} handleDelete={handleDelete} />
           </Card>
           </Col>
           </Row>
