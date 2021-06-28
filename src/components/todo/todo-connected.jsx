@@ -1,89 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import TodoForm from './form.jsx';
-import TodoList from './list.jsx';
-import './todo.scss'
+import { useEffect } from 'react';
+import { Container, Col, Row } from 'react-bootstrap';
+import TodoForm from './form';
+import TodoList from './list';
 
+import TopSection from './progress';
+import useAjax from '../../hooks/useAjax'
+import './todo.scss';
 
 const todoAPI = 'https://api-js401.herokuapp.com/api/v1/todo';
 
-function ToDo(){
-  const [list, setList] = useState([]);
+const ToDo = () => {
+  const [list, postItem, deleteItem, putItem, getItems] = useAjax(todoAPI);
 
-  const addItem = (item) => {
-    item.due = new Date();
-    fetch(todoAPI, {
-      method: 'post',
-      mode: 'cors',
-      cache: 'no-cache',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(item),
-    })
-      .then((response) => response.json())
-      .then((savedItem) => {
-        setList([...list, savedItem]);
-      })
-      .catch(console.error);
-  };
-
-  const toggleComplete = (id) => {
-    let item = list.filter((i) => i._id === id)[0] || {};
-
-    if (item._id) {
-      item.complete = !item.complete;
-
-      let url = `${todoAPI}/${id}`;
-
-      fetch(url, {
-        method: 'put',
-        mode: 'cors',
-        cache: 'no-cache',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(item),
-      })
-        .then((response) => response.json())
-        .then((savedItem) => {
-          setList(
-            list.map((listItem) =>
-              listItem._id === item._id ? savedItem : listItem
-            )
-          );
-        })
-        .catch(console.error);
-    }
-  };
-
-
-  const _getTodoItems = () => {
-    fetch(todoAPI, {
-      method: 'get',
-      mode: 'cors',
-    })
-      .then((data) => data.json())
-      .then((data) => setList(data.results))
-      .catch(console.error);
-  };
-
-  useEffect(_getTodoItems, []);
+  useEffect(
+    () =>
+    (document.title = `To Do List: ${list.filter((item) => !item.complete).length
+      }`)
+  );
+  useEffect(getItems, [getItems]);
 
   return (
-    <>
-      <header>
-        <h2>
-          There are {list.filter((item) => !item.complete).length} Items To
-          Complete
-        </h2>
-      </header>
+    <Container>
+      <Row className="mt-5 mb-4">
+        <Col>
+          <TopSection list={list} />
+        </Col>
+      </Row>
 
-      <section className="todo">
-        <div>
-          <TodoForm handleSubmit={addItem} />
-        </div>
-
-        <div>
-          <TodoList list={list} handleComplete={toggleComplete} handleDelete={handleDelete} />
-        </div>
-      </section>
-    </>
+      <Row>
+        <Col md="4">
+          <TodoForm handleSubmit={postItem} />
+        </Col>
+        <Col md="8">
+          <TodoList
+            list={list}
+            handleComplete={putItem}
+            handleDelete={deleteItem}
+          />
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
