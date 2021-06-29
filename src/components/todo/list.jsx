@@ -1,23 +1,62 @@
-import { Toast } from 'react-bootstrap';
+import React from 'react';
 import Badge from 'react-bootstrap/Badge'
+import {Row, Col } from 'react-bootstrap';
+
 import { Form, Button, Card } from 'react-bootstrap';
+import {PaginationContext} from '../../context/paginationContext' 
 import './todo.scss';
+import { useContext } from 'react';
+import { useState } from 'react';
+import {useEffect} from 'react'
+import Pagination from 'react-bootstrap/Pagination'
 
 
 function TodoList(props) {
+  const context = useContext(PaginationContext);
+  const [currentPage, setCurrent]= useState(context.setStartCount);
+  const numberOfTasks = context.count;
+  const [list, setList]= useState([]);
+
+  useEffect(() => {
+    setList(props.list);
+  }, [props.list]);  
+
+  const pageNumber = list.length/numberOfTasks +1;
+  const lastItem = currentPage * numberOfTasks;
+  const firstItem = lastItem - numberOfTasks;
+  const currentList = list.slice(firstItem, lastItem);
+  const nextPage = (i)=> setCurrent(i);
+
+  const pageNumbers = [];
+  let activePage = currentPage;
+
+  for(let i =1; i < pageNumber; i++){
+    pageNumbers.push(
+      <Pagination.Item key={i}
+      className={i === activePage ? 'active': ''}
+      onClick={()=> nextPage(i)}>
+        {i}
+      </Pagination.Item>
+    )
+  }
+
   return (
 
-    <>
-        
-      {props.list.map((item) => (
+    // <>    
+
+
+    <React.Fragment>
+      {/* {props.list.map((item) => (
+       
         <Card key={item._id} className="listCard">
+          
             <Card.Header>
 <Badge pill variant={item.complete ? 'success' : 'warning'}>
             </Badge>{' '}
               {item.complete ? 'Complete' : 'Pending...'}
           <Button 
           variant='danger'
-        // key={item._id}
+          // key={item._id}
           style={{ maxWidth: '4%', height: '30px', paddingBottom: '6%', paddingRight: '4%'}}
           onClick={() => props.handleDelete(item)}>X</Button>
 
@@ -31,35 +70,113 @@ function TodoList(props) {
             </p>
             <br />
             </Card.Body>
-          </Card>
-  //       <Toast
         
-  //         key={item._id}
-  //         style={{ maxWidth: '100%'}}
-  //         onClose={() => props.handleDelete(item)}
-  //       >
-  //         <Toast.Header>
-  //           <div>
-  //           {/* <Badge pill variant="primary">
-  //   Primary
-  // </Badge>{' '} */}
-  //           <Badge pill variant={item.complete ? 'success' : 'warning'}>
-  //             {item.complete ? 'Complete' : 'Pending...'}
-  //           </Badge>{' '}
-  //           </div>
-  //           <strong className="mr-auto ml-4">{item.assignee}</strong>
-  //         </Toast.Header>
-  //         <Toast.Body onClick={() => props.handleComplete(item)} style={{ cursor: 'pointer' }}>
-  //           <h3 className={`ml-3 ${item.complete ? 'text-muted text-decoration-line-through' : ''}`}>{item.text}</h3>
-  //           <br />
-  //           <p className="float-right" style={{ fontSize: '85%' }}>
-  //             Difficulty: {item.difficulty}
-  //           </p>
-  //           <br />
-  //         </Toast.Body>
-  //       </Toast>
-      ))}
-    </>
+          </Card> */}
+          <Row>
+            <Col>
+
+<Pagination>
+            <Pagination.Prev
+            disabled={activePage === 1 ? true : false}
+            onClick={() => {
+              setCurrent(currentPage - 1);
+            }}
+          />
+          {pageNumbers}
+          <Pagination.Next
+            disabled={activePage > pageNumber - 1 ? true : false}
+            onClick={() => {
+              setCurrent(currentPage + 1);
+            }}
+          />
+        </Pagination>
+            </Col>
+            <Col>
+            <Form>
+              <Form.Control as='select'
+              onChange={(e)=> context.setCount(e.target.value)}>
+                <option value='5'>Items Per Page</option>
+                <option value='3'>3</option>
+                <option value={list.length}>All</option>
+              </Form.Control>
+            </Form>
+            </Col>
+            <Col>
+            <Form>
+              <Form.Control as= 'select'
+              onChange={(e=>{
+                if(e.target.value === 'all') setList(props.list);
+                else{
+                  let completed = list.filter(
+                    (item)=> item.complete === Boolean (e.target.value)
+                  ); setList(completed);
+                  setCurrent(1);
+                }
+              })}>
+                <option value='all'>Filter by</option>
+                <option value={1}>Completed</option>
+                <option value=''>Pending</option>
+              </Form.Control>
+            </Form>
+            </Col>
+            <Col>
+            <Form>
+              <Form.Control as='select'
+              onChange={(e)=>{
+                context.setSort(e.target.value);
+                if(e.target.value === 'all') setList(props.list)
+                else if(e.target.value === 'easy'){
+                  setList(list.sort((a,b)=> b.difficulty - a.difficulty));
+                  setCurrent(1);
+                } else if(e.target.value === 'hard'){
+                  setList(list.sort((a,b)=> a.difficulty - b.difficulty));
+                  setCurrent(1);
+                } else if(e.target.value === 'complete'){
+                  setList(list.sort((a,b)=> a.complete === b.complete ? 0 : a.complete ? 1 : -1));
+                  setCurrent(1);
+              }}}>
+                <option value='all'>Sort by</option>
+              <option value='easy'>Difficulty Descending</option>
+              <option value='hard'>Difficulty Ascending</option>
+              </Form.Control>
+            </Form>
+            </Col>
+          </Row>
+          {currentList.map((item) => (
+       
+        <Card key={item._id} className="listCard">
+          
+            <Card.Header>
+<Badge pill variant={item.complete ? 'success' : 'warning'}>
+            </Badge>{' '}
+              {item.complete ? 'Complete' : 'Pending...'}
+          <Button 
+          variant='danger'
+          // key={item._id}
+          style={{ maxWidth: '4%', height: '30px', paddingBottom: '6%', paddingRight: '4%'}}
+          onClick={async() => {await props.handleDelete(item) 
+            await props.getData();
+          }}>
+            X</Button>
+
+            </Card.Header>
+            <Card.Body onClick={async() => {await props.handleComplete(item);
+                       await props.getData();
+}} style={{ cursor: 'pointer' }}>
+
+            <strong className="mr-auto ml-4">{item.assignee}</strong>
+            <h3 className={`ml-3 ${item.complete ? 'text-muted text-decoration-line-through' : ''}`}>{item.text}</h3>
+            <br />
+            <p className="float-right" style={{ fontSize: '85%' }}>
+              Difficulty: {item.difficulty}
+            </p>
+            <br />
+            </Card.Body>
+        
+          </Card>
+         ))} 
+        </React.Fragment>
+    // </>
   );
 
 };
