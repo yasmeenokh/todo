@@ -1,13 +1,14 @@
 import { Form, Button, Card } from 'react-bootstrap';
 
 import useForm from '../../hooks/useForm';
+import './todo.scss';
 
 function TodoForm(props) {
   const [handleInputChange, handleSubmit] = useForm(props.handleSubmit);
 
 
   return (
-    <Card>
+    <Card className="formCard">
       <Card.Header as="h3">Add Item</Card.Header>
       <Card.Body>
         <Form onSubmit={handleSubmit}>

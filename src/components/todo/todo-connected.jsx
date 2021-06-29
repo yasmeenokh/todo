@@ -5,7 +5,7 @@ import TodoList from './list';
 
 import TopSection from './progress';
 import useAjax from '../../hooks/useAjax'
-import './todo.scss';
+// import './todo.scss';
 
 const todoAPI = 'https://api-js401.herokuapp.com/api/v1/todo';
 
@@ -28,10 +28,10 @@ const ToDo = () => {
       </Row>
 
       <Row>
-        <Col md="4">
+        <Col md="5">
           <TodoForm handleSubmit={postItem} />
         </Col>
-        <Col md="8">
+        <Col md="6">
           <TodoList
             list={list}
             handleComplete={putItem}

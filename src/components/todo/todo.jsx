@@ -58,7 +58,7 @@ const ToDo = () => {
         </Col>
 
         <Col md="8">
-          <TodoList list={list} handleComplete={toggleComplete} />
+          <TodoList list={list} handleComplete={toggleComplete} updateItem={updateItem}/>
         </Col>
 
       </Row>

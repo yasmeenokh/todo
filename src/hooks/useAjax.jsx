@@ -27,13 +27,12 @@ const useAjax = (url) => {
   };
   const putHandler = (item) => {
     item.complete = !item.complete;
-    let extendedUrl = `${url}/${item._id}`;
-    restApi('put', extendedUrl, item);
+    let newUrl = `${url}/${item._id}`;
+    restApi('put', newUrl, item);
   };
-
   const deleteHandler = (item) => {
-    let extendedUrl = `${url}/${item._id}`;
-    restApi('delete', extendedUrl, item);
+    let newUrl = `${url}/${item._id}`;
+    restApi('delete', newUrl, item);
   };
 
   return [list, postHandler, deleteHandler, putHandler, getHandler];
