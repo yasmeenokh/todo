@@ -20,3 +20,8 @@ Open http://localhost:3000 to view it in the browser.
 # White Board: 
 
 ![wb](images/lab31.png)
+
+### Lab 32
+
+![wb](images/lab32.png)
+
