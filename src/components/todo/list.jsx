@@ -73,7 +73,7 @@ function TodoList(props) {
         
           </Card> */}
           <Row>
-            <Col>
+            <Col style={{paddingRight :'1px'}}>
 
 <Pagination>
             <Pagination.Prev
@@ -91,18 +91,18 @@ function TodoList(props) {
           />
         </Pagination>
             </Col>
-            <Col>
-            <Form>
+            <Col style={{paddingRight :'1px'}}>
+            <Form style={{width: '120px'}} >
               <Form.Control as='select'
               onChange={(e)=> context.setCount(e.target.value)}>
-                <option value='5'>Items Per Page</option>
+                <option value='5'>#PerPage</option>
                 <option value='3'>3</option>
                 <option value={list.length}>All</option>
               </Form.Control>
             </Form>
             </Col>
-            <Col>
-            <Form>
+            <Col style={{paddingRight :'1px'}}>
+            <Form style={{width: '105px'}} >
               <Form.Control as= 'select'
               onChange={(e=>{
                 if(e.target.value === 'all') setList(props.list);
@@ -120,7 +120,7 @@ function TodoList(props) {
             </Form>
             </Col>
             <Col>
-            <Form>
+            <Form style={{width: '75px'}}>
               <Form.Control as='select'
               onChange={(e)=>{
                 context.setSort(e.target.value);
@@ -147,9 +147,13 @@ function TodoList(props) {
         <Card key={item._id} className="listCard">
           
             <Card.Header>
-<Badge pill variant={item.complete ? 'success' : 'warning'}>
-            </Badge>{' '}
+              
+{/* <Badge pill variant={item.complete ? 'success' : 'warning'}>
               {item.complete ? 'Complete' : 'Pending...'}
+            </Badge>{' '} */}
+            <Button variant={item.complete ? 'success' : 'warning'} style={{borderRadius: '35px', height: '10px', cursor: 'auto', paddingBottom: '6%' }}>
+              {item.complete ? 'Complete' : 'Pending...'}
+            </Button>
           <Button 
           variant='danger'
           // key={item._id}
