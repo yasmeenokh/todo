@@ -2,8 +2,11 @@ import { Form, Button, Card } from 'react-bootstrap';
 
 import useForm from '../../hooks/useForm';
 import './todo.scss';
+import {useContext} from 'react';
+import { LoginContext } from '../../context/auth';
 
 function TodoForm(props) {
+  const contextType = useContext(LoginContext);
   const [handleInputChange, handleSubmit] = useForm(props.handleSubmit);
 
 
@@ -11,7 +14,12 @@ function TodoForm(props) {
     <Card className="formCard">
       <Card.Header as="h3">Add Item</Card.Header>
       <Card.Body>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={async (e)=>{
+          if(contextType.user.capabilities.includes('create')){
+            await handleSubmit(e);
+            await props.getData();
+          }
+        }}>
           <Form.Group>
             <Form.Label>To Do Item</Form.Label>
             <Form.Control

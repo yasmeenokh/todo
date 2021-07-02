@@ -29,3 +29,6 @@ Open http://localhost:3000 to view it in the browser.
 
 ![wb](images/lab33.png)
 
+### Lab 34
+
+![wb](images/lab34.png)

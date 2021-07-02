@@ -5,10 +5,14 @@ import TodoList from './list';
 
 import TopSection from './progress';
 import { Container, Col, Row } from 'react-bootstrap';
-
+// import { LoginContext } from '../../context/auth';
+// import Login from './logIn';
+// import SignUp from './signUp';
 import './todo.scss';
+// import { useContext } from 'react';
 
 const ToDo = () => {
+  // const contextType = useContext(LoginContext);
   const [list, setList] = useState([]);
   useEffect(
     () =>
@@ -58,7 +62,7 @@ const ToDo = () => {
         </Col>
 
         <Col md="8">
-          <TodoList list={list} handleComplete={toggleComplete} updateItem={updateItem}/>
+          <TodoList list={list} handleComplete={toggleComplete}/>
         </Col>
 
       </Row>
