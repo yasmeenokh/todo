@@ -9,9 +9,10 @@ import { useContext } from 'react';
 import { useState } from 'react';
 import {useEffect} from 'react'
 import Pagination from 'react-bootstrap/Pagination'
-
+import { LoginContext } from '../../context/auth';
 
 function TodoList(props) {
+  const contextType= useContext(LoginContext);
   const context = useContext(PaginationContext);
   const [currentPage, setCurrent]= useState(context.setStartCount);
   const numberOfTasks = context.count;
@@ -91,7 +92,7 @@ function TodoList(props) {
           />
         </Pagination>
             </Col>
-            <Col style={{paddingRight :'1px'}}>
+            <Col>
             <Form style={{width: '120px'}} >
               <Form.Control as='select'
               onChange={(e)=> context.setCount(e.target.value)}>
@@ -101,7 +102,7 @@ function TodoList(props) {
               </Form.Control>
             </Form>
             </Col>
-            <Col style={{paddingRight :'1px'}}>
+            <Col>
             <Form style={{width: '105px'}} >
               <Form.Control as= 'select'
               onChange={(e=>{
@@ -158,14 +159,20 @@ function TodoList(props) {
           variant='danger'
           // key={item._id}
           style={{ maxWidth: '4%', height: '30px', paddingBottom: '6%', paddingRight: '4%'}}
-          onClick={async() => {await props.handleDelete(item) 
-            await props.getData();
+          onClick={async() => {
+            if(contextType.user.capabilities.includes('delete')){
+              await props.handleDelete(item) 
+              await props.getData();
+            }
           }}>
             X</Button>
 
             </Card.Header>
-            <Card.Body onClick={async() => {await props.handleComplete(item);
-                       await props.getData();
+            <Card.Body onClick={async() => {
+              if(contextType.user.capabilities.includes('update')){
+                await props.handleComplete(item);
+                         await props.getData();
+              }
 }} style={{ cursor: 'pointer' }}>
 
             <strong className="mr-auto ml-4">{item.assignee}</strong>
